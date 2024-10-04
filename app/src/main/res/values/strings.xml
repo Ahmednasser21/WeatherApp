@@ -18,4 +18,5 @@
     <string name="gps">GPS</string>
     <string name="map">Map</string>
     <string name="notifications">Notifications</string>
+    <string name="ok">Ok</string>
 </resources>
