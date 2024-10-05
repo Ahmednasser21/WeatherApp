@@ -38,5 +38,9 @@
         android:id="@+id/nav_maps"
         android:name="com.ahmed.weather.iti.ui.MapsFragment"
         android:label="Maps"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_nav_maps_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

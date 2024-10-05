@@ -14,14 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:actionMenuTextAppearance="?attr/colorOnPrimary"
-            app:actionMenuTextColor="?attr/colorOnPrimary"
-            app:navigationIconTint="?attr/colorOnPrimary"
-            app:popupTheme="@style/Theme.WeatherApp.PopupOverlay"
-            app:subtitleTextColor="?attr/colorOnPrimary"
-            app:titleTextColor="?attr/colorOnPrimary" />
+            android:layout_height="?attr/actionBarSize" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -9,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,6 +25,8 @@ class MapsFragment : Fragment() {
     companion object{
         private const val TAG = "MapsFragment"
     }
+    val sharedVM :LocationSharedVM by activityViewModels()
+    val action = MapsFragmentDirections.actionNavMapsToNavHome()
 
     private val callback = OnMapReadyCallback { googleMap ->
         googleMap.setOnMapClickListener {
@@ -55,9 +60,11 @@ class MapsFragment : Fragment() {
             setTitle("Are you sure")
             setMessage("Are you sure? this is your desired location")
             setPositiveButton("Yes") { _, _ ->
-                Log.i(TAG, "showAlertDialog:$longitude ")
-                Log.i(TAG, "showAlertDialog:$latitude ")
-                Log.i(TAG, "showAlertDialog:$cityName ")
+                Log.i(TAG, "showAlertDialog: $longitude")
+                Log.i(TAG, "showAlertDialog: $latitude")
+                Log.i(TAG, "showAlertDialog: $cityName")
+                sharedVM.sendLocationData(LocationData(latitude,longitude,cityName))
+                Navigation.findNavController(requireView()).navigate(action)
             }
             setNegativeButton("No"){dialog,_->
                 googleMap.clear()
