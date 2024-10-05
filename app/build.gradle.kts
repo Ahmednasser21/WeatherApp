@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -45,11 +47,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.2")
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.play.services.basement)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

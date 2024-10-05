@@ -22,9 +22,21 @@
         android:name="com.ahmed.weather.iti.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
-    <dialog
+    <fragment
         android:id="@+id/nav_initial"
         android:name="com.ahmed.weather.iti.ui.intial.InitialSetupFragment"
-        android:label="fragment_initial_setup"
-        tools:layout="@layout/fragment_initial_setup" />
+        android:label="Initial Fragment"
+        tools:layout="@layout/fragment_initial_setup">
+        <action
+            android:id="@+id/action_nav_initial_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_initial_to_mapsFragment"
+            app:destination="@id/nav_maps" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_maps"
+        android:name="com.ahmed.weather.iti.ui.MapsFragment"
+        android:label="Maps"
+        tools:layout="@layout/fragment_maps" />
 </navigation>

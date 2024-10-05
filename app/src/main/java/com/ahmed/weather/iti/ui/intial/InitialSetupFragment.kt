@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity.RESULT_CANCELED
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.databinding.FragmentInitialSetupBinding
 import com.google.android.gms.common.api.ResolvableApiException
@@ -57,7 +58,7 @@ class InitialSetupFragment : DialogFragment() {
     private var latitudeVal: Double = 0.0
     private lateinit var startForResult: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var locationManager: LocationManager
-    private lateinit var ok:Button
+    private lateinit var ok: Button
 
 
     companion object {
@@ -78,8 +79,13 @@ class InitialSetupFragment : DialogFragment() {
         radioGroup = binding.radioGroup
         mapRadioButton = binding.radioMap
         gpsRadioButton = binding.radioGps
-        ok =binding.btnOk
+        ok = binding.btnOk
         notificationSwitch = binding.swchNotification
+
+        ok.setOnClickListener {
+            val action = InitialSetupFragmentDirections.actionNavInitialToNavHome()
+            Navigation.findNavController(it).navigate(action)
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         locationManager =
@@ -98,22 +104,25 @@ class InitialSetupFragment : DialogFragment() {
                 }
             }
 
-        radioGroup.setOnCheckedChangeListener { group, checkId ->
+        radioGroup.setOnCheckedChangeListener { _, checkId ->
 
             when (checkId) {
                 R.id.radio_gps -> {
-                    if (checkPermissions()){
-                        if(isLocationEnabled()){
+                    if (checkPermissions()) {
+                        if (isLocationEnabled()) {
                             startLocationUpdates()
-                        }else{
+                        } else {
                             enableLocationServices()
                         }
-                    }else{
+                    } else {
                         requestPermissions()
                     }
                 }
 
                 R.id.radio_map -> {
+
+                    val action = InitialSetupFragmentDirections.actionNavInitialToMapsFragment()
+                    Navigation.findNavController(requireView()).navigate(action)
 
                 }
             }
@@ -126,8 +135,8 @@ class InitialSetupFragment : DialogFragment() {
                 for (location in locationResult.locations) {
                     longitudeVal = location.longitude
                     latitudeVal = location.latitude
-                    Log.i(TAG, "onLocationResult:${location.longitude }")
-                    Log.i(TAG, "onLocationResult:${location.latitude }")
+                    Log.i(TAG, "onLocationResult:${location.longitude}")
+                    Log.i(TAG, "onLocationResult:${location.latitude}")
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     try {
                         val addresses =
@@ -167,6 +176,11 @@ class InitialSetupFragment : DialogFragment() {
             }
         }
     }
+
+    private fun GoToHomeFragment() {
+        val action = InitialSetupFragment
+    }
+
     private fun requestPermissions() {
         requestPermissionLauncher.launch(ACCESS_COARSE_LOCATION)
     }

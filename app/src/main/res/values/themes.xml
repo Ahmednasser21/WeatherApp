@@ -13,6 +13,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.WeatherApp.NoActionBar">
@@ -23,4 +25,5 @@
     <style name="Theme.WeatherApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.WeatherApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.WeatherApp.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert"/>
 </resources>
