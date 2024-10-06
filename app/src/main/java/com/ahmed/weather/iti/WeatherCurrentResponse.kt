@@ -1,10 +1,5 @@
 package com.ahmed.weather.iti
 
-import com.ahmed.weather.iti.network.Coord
-import com.ahmed.weather.iti.network.Main
-import com.ahmed.weather.iti.network.Sys
-import com.ahmed.weather.iti.network.Weather
-import com.ahmed.weather.iti.network.Wind
 import com.google.gson.annotations.SerializedName
 
 data class WeatherCurrentResponse  (

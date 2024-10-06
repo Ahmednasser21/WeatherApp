@@ -22,20 +22,17 @@ class Repository private constructor(private val retrofit:RetrofitObj) {
 
     suspend fun getWeatherForecast(longitude:Double,latitude:Double,units:String,lang:String): Flow<WeatherForecastResponse>{
         return flow {
-            while(true) {
                 val hourlyForecast = retrofit.service.getForecastData(longitude,latitude, units, lang)
                 emit(hourlyForecast)
                 delay(100)
-            }
         }
     }
     suspend fun getCurrentWeather(longitude:Double,latitude:Double,units:String,lang:String): Flow<WeatherCurrentResponse>{
         return flow {
-            while(true) {
                 val currentWeather = retrofit.service.getCurrentData(longitude,latitude, units, lang)
                 emit(currentWeather)
                 delay(100)
-            }
+
         }
     }
 
