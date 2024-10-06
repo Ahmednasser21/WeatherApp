@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
 import com.ahmed.weather.iti.databinding.FragmentHomeBinding
 import com.ahmed.weather.iti.location.LocationSharedVM
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -53,11 +55,11 @@ class HomeFragment : Fragment() {
     private lateinit var seaLevel: TextView
     private lateinit var visiblity: TextView
     private lateinit var clouds: TextView
-    private lateinit var maxMin:TextView
-    private lateinit var feelsLike:TextView
-    private lateinit var daysRec:RecyclerView
+    private lateinit var maxMin: TextView
+    private lateinit var feelsLike: TextView
+    private lateinit var daysRec: RecyclerView
     private val dailyAdapter = DailyAdapter()
-    private lateinit var hoursRec:RecyclerView
+    private lateinit var hoursRec: RecyclerView
     private val hourlyAdapter = HourlyAdapter()
 
 
@@ -103,7 +105,27 @@ class HomeFragment : Fragment() {
 
                     is DataState.OnSuccess<*> -> {
                         val weatherForecast = result.data as WeatherForecastResponse
-                        Log.i(TAG, "forecast: ${weatherForecast.city}")
+                        val hourlyList = weatherForecast.list.take(9).map { weatherData ->
+                            HourlyDTO(
+                                getHour(weatherData.dtTxt),
+                                (R.drawable.sunny),
+                                "${weatherData.main.temp}°K"
+                            )
+                        }
+                        hourlyAdapter.submitList(hourlyList)
+                        val dailyList = weatherForecast.list.groupBy { it.dtTxt.substring(0, 10) }
+                            .values.take(5).mapIndexed { index, dailyData ->
+                                val firstEntry = dailyData.first()
+                                DailyDTO(
+                                    day = getDayName(firstEntry.dtTxt.substring(0, 10), index),
+                                    img = R.drawable.wind,
+                                    status = firstEntry.weather[0].description.toString(),
+                                    minMax = "${dailyData.minOf { it.main.temp }}°K / ${dailyData.maxOf { it.main.temp }}°K"
+                                )
+                            }
+                        dailyAdapter.submitList(dailyList)
+                        Log.i(TAG, "Hourly List: $hourlyList")
+                        Log.i(TAG, "Daily List: $dailyList")
                     }
 
                     is DataState.OnFailed -> {
@@ -125,7 +147,7 @@ class HomeFragment : Fragment() {
 
                     is DataState.OnSuccess<*> -> {
                         val currentWeather = result.data as WeatherCurrentResponse
-                        currentDegree.text = currentWeather.main?.temp.toString()
+                        currentDegree.text = "${currentWeather.main?.temp}°K"
                         currentState.text = currentWeather.weather?.get(0)?.description
                         pressure.text = currentWeather.main?.pressure.toString()
                         visiblity.text = currentWeather.visibility.toString()
@@ -133,8 +155,9 @@ class HomeFragment : Fragment() {
                         humidity.text = currentWeather.main?.humidity.toString()
                         clouds.text = currentWeather.clouds.toString()
                         seaLevel.text = currentWeather.main?.seaLevel.toString()
-                        feelsLike.text = "Feels like  ${currentWeather.main?.feelsLike.toString()}"
-                        maxMin.text = "${currentWeather.main?.tempMax}/${currentWeather.main?.tempMin}"
+                        feelsLike.text = "Feels like  ${currentWeather.main?.feelsLike}°K"
+                        maxMin.text =
+                            "${currentWeather.main?.tempMax}°K/${currentWeather.main?.tempMin}°K"
                         Log.i(TAG, "current: ${currentWeather.main}")
                     }
 
@@ -162,7 +185,8 @@ class HomeFragment : Fragment() {
         maxMin = binding.tvMaxMin
         feelsLike = binding.tvFeelsLike
         hoursRec = binding.recHours.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = hourlyAdapter
         }
         daysRec = binding.recDays.apply {
@@ -186,6 +210,22 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun getDayName(dateString: String, position: Int): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = dateFormat.parse(dateString)
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        return when (position) {
+            0 -> "Tomorrow"
+            else -> SimpleDateFormat("EEE", Locale.getDefault()).format(calendar.time)
+        }
+    }
+    fun getHour(dateTimeString: String): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val date = dateFormat.parse(dateTimeString)
+        val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return hourFormat.format(date)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
