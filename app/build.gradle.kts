@@ -51,6 +51,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.8.2")
     implementation ("androidx.activity:activity-ktx:1.9.2")
     implementation ("androidx.fragment:fragment-ktx:1.8.4")
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation(libs.play.services.basement)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)

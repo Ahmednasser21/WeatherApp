@@ -1,4 +1,4 @@
-package com.ahmed.weather.iti.ui
+package com.ahmed.weather.iti.location
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

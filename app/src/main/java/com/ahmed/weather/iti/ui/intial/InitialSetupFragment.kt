@@ -26,12 +26,11 @@ import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.databinding.FragmentInitialSetupBinding
-import com.ahmed.weather.iti.ui.LocationData
-import com.ahmed.weather.iti.ui.LocationSharedVM
+import com.ahmed.weather.iti.location.LocationData
+import com.ahmed.weather.iti.location.LocationSharedVM
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -63,7 +62,7 @@ class InitialSetupFragment : DialogFragment() {
     private lateinit var startForResult: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var locationManager: LocationManager
     private lateinit var ok: Button
-    val sharedVM:LocationSharedVM by activityViewModels()
+    val sharedVM: LocationSharedVM by activityViewModels()
 
     companion object {
         private const val TAG = "InitialSetupFragment"
@@ -158,7 +157,7 @@ class InitialSetupFragment : DialogFragment() {
             }
         }
 
-        locationRequest = LocationRequest.Builder(5000)
+        locationRequest = LocationRequest.Builder(300000)
             .setIntervalMillis(10000)
             .setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
             .build()

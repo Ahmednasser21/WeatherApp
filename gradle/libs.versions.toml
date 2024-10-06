@@ -11,7 +11,9 @@ constraintlayout = "2.1.4"
 lifecycleLivedataKtx = "2.8.6"
 lifecycleViewmodelKtx = "2.8.6"
 navigationFragmentKtx = "2.8.0"
+navigationFragmentKtxVersion = "2.8.2"
 navigationUiKtx = "2.8.0"
+navigationUiKtxVersion = "2.8.2"
 playServicesBasement = "18.4.0"
 playServicesLocation = "21.3.0"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
@@ -19,6 +21,8 @@ playServicesMaps = "19.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-navigation-fragment-ktx-v282 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+androidx-navigation-ui-ktx-v282 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

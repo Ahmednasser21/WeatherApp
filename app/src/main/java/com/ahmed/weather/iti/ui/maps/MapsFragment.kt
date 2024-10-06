@@ -1,4 +1,4 @@
-package com.ahmed.weather.iti.ui
+package com.ahmed.weather.iti.ui.maps
 
 import android.location.Geocoder
 import androidx.fragment.app.Fragment
@@ -10,9 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
+import com.ahmed.weather.iti.location.LocationData
+import com.ahmed.weather.iti.location.LocationSharedVM
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -25,7 +26,7 @@ class MapsFragment : Fragment() {
     companion object{
         private const val TAG = "MapsFragment"
     }
-    val sharedVM :LocationSharedVM by activityViewModels()
+    val sharedVM : LocationSharedVM by activityViewModels()
     val action = MapsFragmentDirections.actionNavMapsToNavHome()
 
     private val callback = OnMapReadyCallback { googleMap ->
