@@ -6,11 +6,6 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="settings_icon">Settings icon</string>
     <string name="initial_setup">Initial Setup</string>
@@ -18,7 +13,10 @@
     <string name="gps">GPS</string>
     <string name="map">Map</string>
     <string name="notifications">Notifications</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="maps">Maps</string>
     <string name="textview">TextView</string>
+    <string name="favourite">Favourite</string>
+    <string name="alarms">Alarms</string>
+    <string name="home">Home</string>
 </resources>

@@ -8,19 +8,23 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.ahmed.weather.iti.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.ahmed.weather.iti.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_favourite"
+        android:name="com.ahmed.weather.iti.ui.favourite.FavouriteFragment"
+        android:label="@string/favourite"
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_nav_favourite_to_nav_maps"
+            app:destination="@id/nav_maps" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_alarm"
         android:name="com.ahmed.weather.iti.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/alarms"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_initial"
@@ -42,5 +46,11 @@
         <action
             android:id="@+id/action_nav_maps_to_nav_home"
             app:destination="@id/nav_home" />
+        <argument
+            android:name="fragment_name"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_maps_to_nav_favourite"
+            app:destination="@id/nav_favourite" />
     </fragment>
 </navigation>

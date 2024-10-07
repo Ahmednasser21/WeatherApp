@@ -29,8 +29,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.databinding.FragmentInitialSetupBinding
-import com.ahmed.weather.iti.location.LocationData
-import com.ahmed.weather.iti.location.LocationSharedVM
+import com.ahmed.weather.iti.ui.maps.LocationData
+import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -124,7 +124,7 @@ class InitialSetupFragment : DialogFragment() {
 
                 R.id.radio_map -> {
 
-                    val action = InitialSetupFragmentDirections.actionNavInitialToMapsFragment()
+                    val action = InitialSetupFragmentDirections.actionNavInitialToMapsFragment("initial")
                     Navigation.findNavController(requireView()).navigate(action)
 
                 }
@@ -148,7 +148,7 @@ class InitialSetupFragment : DialogFragment() {
                             val addressLine = "${addresses[0].adminArea}}"
                             address = addressLine
                             Log.i(TAG, "onLocationResult: $addressLine")
-                            sharedVM.sendLocationData(LocationData( location.longitude,location.latitude,addressLine))
+                            sharedVM.sendMainLocationData(LocationData( location.longitude,location.latitude,addressLine))
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()

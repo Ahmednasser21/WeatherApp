@@ -12,18 +12,18 @@
         android:visible="false"/>
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_menu_camera"
-        android:title="@string/menu_home"
+        android:icon="@drawable/baseline_home_filled_24"
+        android:title="@string/home"
         android:visible="false"/>
     <item
-        android:id="@+id/nav_gallery"
-        android:icon="@drawable/ic_menu_gallery"
-        android:title="@string/menu_gallery"
+        android:id="@+id/nav_favourite"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="@string/favourite"
         android:visible="false"/>
     <item
-        android:id="@+id/nav_slideshow"
-        android:icon="@drawable/ic_menu_slideshow"
-        android:title="@string/menu_slideshow"
+        android:id="@+id/nav_alarm"
+        android:icon="@drawable/baseline_alarm_24"
+        android:title="@string/alarms"
         android:visible="false"/>
     <item android:id="@+id/nav_maps"
         android:title="@string/maps"

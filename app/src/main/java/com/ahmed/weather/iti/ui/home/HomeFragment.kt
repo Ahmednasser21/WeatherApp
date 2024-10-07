@@ -1,7 +1,6 @@
 package com.ahmed.weather.iti.ui.home
 
 import WeatherForecastResponse
-import android.icu.lang.UCharacter.VerticalOrientation
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,8 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
+import com.ahmed.weather.iti.database.FavouriteDataBase
 import com.ahmed.weather.iti.databinding.FragmentHomeBinding
-import com.ahmed.weather.iti.location.LocationSharedVM
+import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
 import kotlinx.coroutines.CoroutineScope
@@ -68,7 +68,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = HomeViewModelFactory(Repository.getInstance(RetrofitObj))
+        val factory = HomeViewModelFactory(Repository.getInstance(RetrofitObj,
+            FavouriteDataBase.getInstance(requireContext())))
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -149,12 +150,12 @@ class HomeFragment : Fragment() {
                         val currentWeather = result.data as WeatherCurrentResponse
                         currentDegree.text = "${currentWeather.main?.temp}°K"
                         currentState.text = currentWeather.weather?.get(0)?.description
-                        pressure.text = currentWeather.main?.pressure.toString()
+                        pressure.text = "${currentWeather.main?.pressure.toString()}hpa"
                         visiblity.text = currentWeather.visibility.toString()
-                        wind.text = currentWeather.wind?.speed.toString()
-                        humidity.text = currentWeather.main?.humidity.toString()
-                        clouds.text = currentWeather.clouds.toString()
-                        seaLevel.text = currentWeather.main?.seaLevel.toString()
+                        wind.text = "${currentWeather.wind?.speed.toString()}mile/H"
+                        humidity.text ="${currentWeather.main?.humidity.toString()}%"
+                        clouds.text = "${currentWeather.clouds?.all.toString()}%"
+                        seaLevel.text = "${currentWeather.main?.seaLevel.toString()}pa"
                         feelsLike.text = "Feels like  ${currentWeather.main?.feelsLike}°K"
                         maxMin.text =
                             "${currentWeather.main?.tempMax}°K/${currentWeather.main?.tempMin}°K"
@@ -220,7 +221,7 @@ class HomeFragment : Fragment() {
             else -> SimpleDateFormat("EEE", Locale.getDefault()).format(calendar.time)
         }
     }
-    fun getHour(dateTimeString: String): String {
+    private fun getHour(dateTimeString: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val date = dateFormat.parse(dateTimeString)
         val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())

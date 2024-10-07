@@ -1,19 +1,23 @@
 package com.ahmed.weather.iti.repository
 
 import WeatherForecastResponse
+import android.annotation.SuppressLint
+import android.content.Context
 import com.ahmed.weather.iti.WeatherCurrentResponse
+import com.ahmed.weather.iti.database.FavouriteDTO
+import com.ahmed.weather.iti.database.FavouriteDataBase
 import com.ahmed.weather.iti.network.RetrofitObj
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class Repository private constructor(private val retrofit:RetrofitObj) {
+class Repository private constructor(private val retrofit:RetrofitObj,private val favouriteDataBase: FavouriteDataBase) {
 
     companion object{
         private var INSTANCE: Repository? = null
-        fun getInstance(retrofit:RetrofitObj):Repository{
+        fun getInstance(retrofit:RetrofitObj , favouriteDataBase: FavouriteDataBase):Repository{
             return INSTANCE?: synchronized(this){
-                val instance = Repository(retrofit)
+                val instance = Repository(retrofit,favouriteDataBase)
                 INSTANCE = instance
                 instance
             }
@@ -34,6 +38,15 @@ class Repository private constructor(private val retrofit:RetrofitObj) {
                 delay(100)
 
         }
+    }
+    suspend fun addFav(favouriteDTO: FavouriteDTO){
+        favouriteDataBase.favouriteDAO.addFav(favouriteDTO)
+    }
+    suspend fun removeFav(favouriteDTO: FavouriteDTO){
+        favouriteDataBase.favouriteDAO.deleteFav(favouriteDTO)
+    }
+    fun getAllFav():Flow<List<FavouriteDTO>>{
+        return favouriteDataBase.favouriteDAO.getAllFav()
     }
 
 }

@@ -12,8 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
-import com.ahmed.weather.iti.location.LocationData
-import com.ahmed.weather.iti.location.LocationSharedVM
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,8 +24,10 @@ class MapsFragment : Fragment() {
     companion object{
         private const val TAG = "MapsFragment"
     }
-    val sharedVM : LocationSharedVM by activityViewModels()
-    val action = MapsFragmentDirections.actionNavMapsToNavHome()
+    private val sharedVM : LocationSharedVM by activityViewModels()
+    private val actionInitial = MapsFragmentDirections.actionNavMapsToNavHome()
+    private val actionFav = MapsFragmentDirections.actionNavMapsToNavFavourite()
+   private lateinit var navFragmentName:String
 
     private val callback = OnMapReadyCallback { googleMap ->
         googleMap.setOnMapClickListener {
@@ -41,6 +41,10 @@ class MapsFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        navFragmentName = MapsFragmentArgs.fromBundle(arguments?:Bundle()).fragmentName
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,8 +68,13 @@ class MapsFragment : Fragment() {
                 Log.i(TAG, "showAlertDialog: $longitude")
                 Log.i(TAG, "showAlertDialog: $latitude")
                 Log.i(TAG, "showAlertDialog: $cityName")
-                sharedVM.sendLocationData(LocationData(latitude,longitude,cityName))
-                Navigation.findNavController(requireView()).navigate(action)
+                if (navFragmentName == "initial") {
+                    sharedVM.sendMainLocationData(LocationData(latitude, longitude, cityName))
+                    Navigation.findNavController(requireView()).navigate(actionInitial)
+                }else if(navFragmentName == "fav"){
+                    sharedVM.sendFavLocationData(LocationData(latitude, longitude, cityName))
+                    Navigation.findNavController(requireView()).navigate(actionFav)
+                }
             }
             setNegativeButton("No"){dialog,_->
                 googleMap.clear()
