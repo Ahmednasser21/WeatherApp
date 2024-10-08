@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
 import com.ahmed.weather.iti.database.FavouriteDataBase
@@ -21,6 +23,7 @@ import com.ahmed.weather.iti.databinding.FragmentHomeBinding
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
+import com.ahmed.weather.iti.ui.notification.WeatherNotificationWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,6 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
 
@@ -68,8 +72,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = HomeViewModelFactory(Repository.getInstance(RetrofitObj,
-            FavouriteDataBase.getInstance(requireContext())))
+        val factory = HomeViewModelFactory(
+            Repository.getInstance(
+                RetrofitObj,
+                FavouriteDataBase.getInstance(requireContext())
+            )
+        )
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -153,7 +161,7 @@ class HomeFragment : Fragment() {
                         pressure.text = "${currentWeather.main?.pressure.toString()}hpa"
                         visiblity.text = currentWeather.visibility.toString()
                         wind.text = "${currentWeather.wind?.speed.toString()}mile/H"
-                        humidity.text ="${currentWeather.main?.humidity.toString()}%"
+                        humidity.text = "${currentWeather.main?.humidity.toString()}%"
                         clouds.text = "${currentWeather.clouds?.all.toString()}%"
                         seaLevel.text = "${currentWeather.main?.seaLevel.toString()}pa"
                         feelsLike.text = "Feels like  ${currentWeather.main?.feelsLike}°K"
@@ -170,6 +178,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        val workRequest =
+            PeriodicWorkRequestBuilder<WeatherNotificationWorker>(3, TimeUnit.HOURS).build()
+        WorkManager.getInstance(requireContext()).enqueue(workRequest)
     }
 
     private fun initialiseUI() {
@@ -221,6 +232,7 @@ class HomeFragment : Fragment() {
             else -> SimpleDateFormat("EEE", Locale.getDefault()).format(calendar.time)
         }
     }
+
     private fun getHour(dateTimeString: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val date = dateFormat.parse(dateTimeString)

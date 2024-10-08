@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 
@@ -18,6 +19,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MapsFragment : Fragment() {
@@ -37,7 +40,11 @@ class MapsFragment : Fragment() {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
             val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
             val cityName = addresses?.get(0)?.adminArea.toString()
-            showAlertDialog(it.longitude,it.latitude,cityName,googleMap)
+            lifecycleScope.launch {
+                delay(300)
+                showAlertDialog(it.longitude,it.latitude,cityName,googleMap)
+            }
+
         }
     }
 
