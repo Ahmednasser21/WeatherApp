@@ -23,9 +23,9 @@
 
     <fragment
         android:id="@+id/nav_alarm"
-        android:name="com.ahmed.weather.iti.ui.slideshow.SlideshowFragment"
+        android:name="com.ahmed.weather.iti.ui.alarm.AlarmFragment"
         android:label="@string/alarms"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_alarm" />
     <fragment
         android:id="@+id/nav_initial"
         android:name="com.ahmed.weather.iti.ui.intial.InitialSetupFragment"

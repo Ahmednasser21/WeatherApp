@@ -1,6 +1,7 @@
 package com.ahmed.weather.iti.ui.notification
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
@@ -19,7 +20,7 @@ class WeatherNotificationWorker (context: Context, params: WorkerParameters) : C
             }
             val notificationHelper = WeatherNotificationHelper(applicationContext)
             notificationHelper.createNotificationChannel()
-            notificationHelper.sendNotification("${response.main?.temp}   ${response.weather?.get(0)?.description}")
+            notificationHelper.sendAlarm("${response.main?.temp}   ${response.weather?.get(0)?.description}",Uri.EMPTY)
             Result.success()
         } catch (e: Exception) {
             Result.failure()

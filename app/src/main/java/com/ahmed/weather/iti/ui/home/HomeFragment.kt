@@ -14,8 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
 import com.ahmed.weather.iti.database.FavouriteDataBase
@@ -23,7 +21,6 @@ import com.ahmed.weather.iti.databinding.FragmentHomeBinding
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
-import com.ahmed.weather.iti.ui.notification.WeatherNotificationWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,7 +31,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
 
@@ -178,9 +174,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        val workRequest =
-            PeriodicWorkRequestBuilder<WeatherNotificationWorker>(3, TimeUnit.HOURS).build()
-        WorkManager.getInstance(requireContext()).enqueue(workRequest)
     }
 
     private fun initialiseUI() {
