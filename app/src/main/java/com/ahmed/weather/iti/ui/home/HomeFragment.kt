@@ -1,6 +1,7 @@
 package com.ahmed.weather.iti.ui.home
 
 import WeatherForecastResponse
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -88,15 +89,23 @@ class HomeFragment : Fragment() {
         startUpdatingTime()
 
         lifecycleScope.launch {
-            sharedVM.mainLocationData.collect {
-                longitude = it.longitude
-                latitude = it.latitude
-                cityName = it.cityName
-                city.text = it.cityName.substringBefore("}")
-                homeViewModel.getWeatherForecast(longitude, latitude, "standard", "en")
-                homeViewModel.getCurrentWeather(longitude, latitude, "standard", "en")
-                Log.i(TAG, "onViewCreated: ${it.latitude} \n ${it.longitude} ${it.cityName}")
-            }
+//            sharedVM.mainLocationData.collect {
+//                longitude = it.longitude
+//                latitude = it.latitude
+//                cityName = it.cityName
+//                city.text = it.cityName.substringBefore("}")
+//                homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
+//                homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
+//                Log.i(TAG, "onViewCreated: ${it.latitude} \n ${it.longitude} ${it.cityName}")
+//            }
+            val prefs = requireActivity().getSharedPreferences("locationData", Context.MODE_PRIVATE)
+            longitude = prefs.getFloat("longitude",0.0f).toDouble()
+            latitude = prefs.getFloat("latitude",0.0f).toDouble()
+            cityName = prefs.getString("address_line", "NorthSinai").toString()
+            city.text =cityName.substringBefore("}")
+            homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
+            homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
+
 
         }
         lifecycleScope.launch {
@@ -124,7 +133,7 @@ class HomeFragment : Fragment() {
                                 DailyDTO(
                                     day = getDayName(firstEntry.dtTxt.substring(0, 10), index),
                                     img = R.drawable.wind,
-                                    status = firstEntry.weather[0].description.toString(),
+                                    status = "${firstEntry.weather[0].description}",
                                     minMax = "${dailyData.minOf { it.main.temp }}°K / ${dailyData.maxOf { it.main.temp }}°K"
                                 )
                             }
@@ -154,15 +163,16 @@ class HomeFragment : Fragment() {
                         val currentWeather = result.data as WeatherCurrentResponse
                         currentDegree.text = "${currentWeather.main?.temp}°K"
                         currentState.text = currentWeather.weather?.get(0)?.description
-                        pressure.text = "${currentWeather.main?.pressure.toString()}hpa"
+                        pressure.text = "${currentWeather.main?.pressure}hpa"
                         visiblity.text = currentWeather.visibility.toString()
-                        wind.text = "${currentWeather.wind?.speed.toString()}mile/H"
-                        humidity.text = "${currentWeather.main?.humidity.toString()}%"
-                        clouds.text = "${currentWeather.clouds?.all.toString()}%"
-                        seaLevel.text = "${currentWeather.main?.seaLevel.toString()}pa"
+                        wind.text = "${currentWeather.wind?.speed}mile/H"
+                        humidity.text = "${currentWeather.main?.humidity}%"
+                        clouds.text = "${currentWeather.clouds?.all}%"
+                        seaLevel.text = "${currentWeather.main?.seaLevel}pa"
                         feelsLike.text = "Feels like  ${currentWeather.main?.feelsLike}°K"
                         maxMin.text =
                             "${currentWeather.main?.tempMax}°K/${currentWeather.main?.tempMin}°K"
+
                         Log.i(TAG, "current: ${currentWeather.main}")
                     }
 
@@ -233,7 +243,8 @@ class HomeFragment : Fragment() {
         return hourFormat.format(date)
     }
 
-    override fun onDestroyView() {
+
+        override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

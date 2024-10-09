@@ -53,4 +53,9 @@
             android:id="@+id/action_nav_maps_to_nav_favourite"
             app:destination="@id/nav_favourite" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.ahmed.weather.iti.ui.settings.Settings"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

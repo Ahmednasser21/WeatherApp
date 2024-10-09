@@ -1,7 +1,9 @@
 package com.ahmed.weather.iti.ui.alarm
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -27,6 +29,7 @@ import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
 import com.ahmed.weather.iti.ui.home.DataState
 import com.ahmed.weather.iti.ui.notification.WeatherNotificationHelper
+import com.ahmed.weather.iti.ui.notification.WeatherNotificationReceiver
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -232,20 +235,33 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
     }
 
     private fun showDeleteAlert(alarmDTO: AlarmDTO) {
-
         val dialog = AlertDialog.Builder(requireContext(), R.style.Theme_WeatherApp_Dialog).apply {
-            setTitle("Are you sure")
+            setTitle("Are you sure?")
             setMessage("Do you want to delete this alarm?")
             setPositiveButton("Yes") { _, _ ->
                 lifecycleScope.launch {
                     alarmViewModel.deleteAlarm(alarmDTO)
+                    val notificationHelper = WeatherNotificationHelper(requireContext())
+                    notificationHelper.cancelScheduledAlarm(2002)
+                    cancelAlarm()
                 }
             }
-            setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
-        }.create().show()
+            setNegativeButton("No", null)
+        }
+        dialog.show()
+    }
 
+    private fun cancelAlarm() {
+        val intent = Intent(requireContext(), WeatherNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            2002,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
     }
 
     override fun onResume() {

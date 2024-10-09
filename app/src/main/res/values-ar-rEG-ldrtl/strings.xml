@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">تطبيق الطقس</string>
+    <string name="navigation_drawer_open">فتح قائمة التنقل</string>
+    <string name="navigation_drawer_close">إغلاق قائمة التنقل</string>
+    <string name="nav_header_title">أندرويد ستوديو</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">رأس التنقل</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="hello_blank_fragment">مرحبا، فراغ الشظية</string>
+    <string name="settings_icon">أيقونة الإعدادات</string>
+    <string name="initial_setup">الإعداد الأولي</string>
+    <string name="location">الموقع</string>
+    <string name="gps">نظام تحديد المواقع</string>
+    <string name="map">الخريطة</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="ok">موافق</string>
+    <string name="maps">الخرائط</string>
+    <string name="textview">TextView</string>
+    <string name="favourite">المفضلة</string>
+    <string name="alarms">التنبيهات</string>
+    <string name="home">الرئيسية</string>
+    <string name="language">اللغة</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="celsius">مئوية</string>
+    <string name="kalvin">كالفن</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="meter_s">متر/ثانية</string>
+    <string name="mile_h">ميل/ساعة</string>
+    <string name="enable">تمكين</string>
+    <string name="disable">تعطيل</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="pressure">الضغط</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="wind">الرياح</string>
+    <string name="sea_level">مستوى البحر</string>
+    <string name="visibility">الرؤية</string>
+    <string name="clouds">السحب</string>
+</resources>

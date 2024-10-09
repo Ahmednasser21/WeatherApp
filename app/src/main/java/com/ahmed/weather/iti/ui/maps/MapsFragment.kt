@@ -1,5 +1,6 @@
 package com.ahmed.weather.iti.ui.maps
 
+import android.content.Context
 import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
@@ -76,6 +77,12 @@ class MapsFragment : Fragment() {
                 Log.i(TAG, "showAlertDialog: $latitude")
                 Log.i(TAG, "showAlertDialog: $cityName")
                 if (navFragmentName == "initial") {
+                    val prefs = requireActivity().getSharedPreferences("locationData", Context.MODE_PRIVATE)
+                    with(prefs.edit()) {
+                        putFloat("longitude", longitude.toFloat())
+                        putFloat("latitude", latitude.toFloat())
+                        putString("address_line", cityName)
+                        apply()}
                     sharedVM.sendMainLocationData(LocationData(latitude, longitude, cityName))
                     Navigation.findNavController(requireView()).navigate(actionInitial)
                 }else if(navFragmentName == "fav"){

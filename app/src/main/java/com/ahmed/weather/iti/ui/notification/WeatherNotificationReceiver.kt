@@ -19,7 +19,7 @@ class WeatherNotificationReceiver : BroadcastReceiver() {
 
         val action = intent.action
         if (action == "DISMISS_ACTION") {
-            val notificationId = intent.getIntExtra("NOTIFICATION_ID", 0)
+            val notificationId = intent.getIntExtra("NOTIFICATION_ID", 2002)
             notificationHelper.stopAlarmSound()
 
             val notificationManager = NotificationManagerCompat.from(context)

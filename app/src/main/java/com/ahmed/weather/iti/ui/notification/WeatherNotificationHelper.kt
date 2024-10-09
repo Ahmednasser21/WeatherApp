@@ -91,6 +91,22 @@ class WeatherNotificationHelper(private val context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, notificationTime, pendingIntent)
     }
+    fun cancelScheduledAlarm(alarmId: Int) {
+        val intent = Intent(context, WeatherNotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            alarmId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+
+        stopAlarmSound()
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(alarmId)
+    }
 
     private fun playAlarmSound(context: Context, soundUri: Uri?) {
         ringtone = RingtoneManager.getRingtone(context, soundUri)

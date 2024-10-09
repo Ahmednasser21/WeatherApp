@@ -4,6 +4,8 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentSender
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
@@ -62,6 +64,8 @@ class InitialSetupFragment : DialogFragment() {
     private lateinit var startForResult: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var locationManager: LocationManager
     private lateinit var ok: Button
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: Editor
     val sharedVM: LocationSharedVM by activityViewModels()
 
     companion object {
@@ -149,6 +153,13 @@ class InitialSetupFragment : DialogFragment() {
                             address = addressLine
                             Log.i(TAG, "onLocationResult: $addressLine")
                             sharedVM.sendMainLocationData(LocationData( location.longitude,location.latitude,addressLine))
+                            val prefs = requireActivity().getSharedPreferences("locationData", Context.MODE_PRIVATE)
+                            with(prefs.edit()) {
+                                putFloat("longitude", location.longitude.toFloat())
+                                putFloat("latitude", location.latitude.toFloat())
+                                putString("address_line", addressLine)
+                                apply()
+                            }
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()

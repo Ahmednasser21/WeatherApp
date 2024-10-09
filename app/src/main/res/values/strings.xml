@@ -19,4 +19,22 @@
     <string name="favourite">Favourite</string>
     <string name="alarms">Alarms</string>
     <string name="home">Home</string>
+    <string name="language">Language</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="kalvin">Kalvin</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="meter_s">meter/s</string>
+    <string name="mile_h">mile/h</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="sea_level">Sea level</string>
+    <string name="visibility">Visibility</string>
+    <string name="clouds">Clouds</string>
 </resources>
