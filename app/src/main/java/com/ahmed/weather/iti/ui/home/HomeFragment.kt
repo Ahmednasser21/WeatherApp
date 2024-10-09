@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
-import com.ahmed.weather.iti.database.FavouriteDataBase
+import com.ahmed.weather.iti.database.DataBase
 import com.ahmed.weather.iti.databinding.FragmentHomeBinding
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
         val factory = HomeViewModelFactory(
             Repository.getInstance(
                 RetrofitObj,
-                FavouriteDataBase.getInstance(requireContext())
+                DataBase.getInstance(requireContext())
             )
         )
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)

@@ -1,23 +1,22 @@
 package com.ahmed.weather.iti.repository
 
 import WeatherForecastResponse
-import android.annotation.SuppressLint
-import android.content.Context
 import com.ahmed.weather.iti.WeatherCurrentResponse
+import com.ahmed.weather.iti.database.AlarmDTO
 import com.ahmed.weather.iti.database.FavouriteDTO
-import com.ahmed.weather.iti.database.FavouriteDataBase
+import com.ahmed.weather.iti.database.DataBase
 import com.ahmed.weather.iti.network.RetrofitObj
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class Repository private constructor(private val retrofit:RetrofitObj,private val favouriteDataBase: FavouriteDataBase) {
+class Repository private constructor(private val retrofit:RetrofitObj,private val dataBase: DataBase) {
 
     companion object{
         private var INSTANCE: Repository? = null
-        fun getInstance(retrofit:RetrofitObj , favouriteDataBase: FavouriteDataBase):Repository{
+        fun getInstance(retrofit:RetrofitObj, dataBase: DataBase):Repository{
             return INSTANCE?: synchronized(this){
-                val instance = Repository(retrofit,favouriteDataBase)
+                val instance = Repository(retrofit,dataBase)
                 INSTANCE = instance
                 instance
             }
@@ -40,13 +39,22 @@ class Repository private constructor(private val retrofit:RetrofitObj,private va
         }
     }
     suspend fun addFav(favouriteDTO: FavouriteDTO){
-        favouriteDataBase.favouriteDAO.addFav(favouriteDTO)
+        dataBase.favouriteDAO.addFav(favouriteDTO)
     }
     suspend fun removeFav(favouriteDTO: FavouriteDTO){
-        favouriteDataBase.favouriteDAO.deleteFav(favouriteDTO)
+        dataBase.favouriteDAO.deleteFav(favouriteDTO)
     }
     fun getAllFav():Flow<List<FavouriteDTO>>{
-        return favouriteDataBase.favouriteDAO.getAllFav()
+        return dataBase.favouriteDAO.getAllFav()
+    }
+    suspend fun addAlarm(alarmDTO: AlarmDTO){
+        dataBase.alarmDao.addAlarm(alarmDTO)
+    }
+    suspend fun removeAlarm(alarmDTO: AlarmDTO){
+        dataBase.alarmDao.deleteAlarm(alarmDTO)
+    }
+    fun getAllAlarms():Flow<List<AlarmDTO>>{
+        return dataBase.alarmDao.getAllAlarms()
     }
 
 }

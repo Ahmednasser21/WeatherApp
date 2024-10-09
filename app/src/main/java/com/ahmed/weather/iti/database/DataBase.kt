@@ -6,18 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [FavouriteDTO::class], version = 1)
-abstract class FavouriteDataBase : RoomDatabase() {
+@Database(entities = [FavouriteDTO::class,AlarmDTO::class], version = 1)
+abstract class DataBase : RoomDatabase() {
     abstract val favouriteDAO: FavouriteDAO
+    abstract val alarmDao:AlarmDAO
 
     companion object {
-        private var INSTANCE:FavouriteDataBase? = null
+        private var INSTANCE:DataBase? = null
 
-        fun getInstance(context: Context):FavouriteDataBase{
+        fun getInstance(context: Context):DataBase{
             return INSTANCE?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    FavouriteDataBase::class.java,
+                    DataBase::class.java,
                     "FavouriteLocations"
                 ).build()
                 INSTANCE = instance

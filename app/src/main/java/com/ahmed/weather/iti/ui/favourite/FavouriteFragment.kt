@@ -15,15 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.database.FavouriteDTO
-import com.ahmed.weather.iti.database.FavouriteDataBase
+import com.ahmed.weather.iti.database.DataBase
 import com.ahmed.weather.iti.databinding.FragmentFavouriteBinding
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
-import com.ahmed.weather.iti.ui.maps.LocationData
-import com.ahmed.weather.iti.ui.maps.MapsFragment
-import com.ahmed.weather.iti.ui.maps.MapsFragment.Companion
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -49,7 +45,7 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener {
         val factory = FavouriteViewModelFactory(
             Repository.getInstance(
                 RetrofitObj,
-                FavouriteDataBase.getInstance(requireContext())
+                DataBase.getInstance(requireContext())
             )
         )
         favouriteViewModel = ViewModelProvider(this, factory)[FavouriteViewModel::class.java]
