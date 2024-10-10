@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahmed.weather.iti.database.FavouriteDTO
+import com.ahmed.weather.iti.repository.IRepository
 import com.ahmed.weather.iti.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val TAG = "FavouriteViewModel"
-class FavouriteViewModel(private val repository: Repository) : ViewModel() {
+class FavouriteViewModel(private val repository: IRepository) : ViewModel() {
 
     private val _favList = MutableSharedFlow<List<FavouriteDTO>>()
     val favList = _favList.asSharedFlow()

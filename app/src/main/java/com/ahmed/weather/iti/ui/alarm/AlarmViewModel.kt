@@ -3,6 +3,7 @@ package com.ahmed.weather.iti.ui.alarm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ahmed.weather.iti.database.AlarmDTO
+import com.ahmed.weather.iti.repository.IRepository
 import com.ahmed.weather.iti.repository.Repository
 import com.ahmed.weather.iti.ui.home.DataState
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class AlarmViewModel(private val repository:Repository) : ViewModel() {
+class AlarmViewModel(private val repository: IRepository) : ViewModel() {
 
     private var _alarmList = MutableStateFlow<DataState>(DataState.Loading)
     val alarmList= _alarmList.asStateFlow()

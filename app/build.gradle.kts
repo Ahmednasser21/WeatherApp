@@ -63,7 +63,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     testImplementation("androidx.arch.core:core-testing:2.1.0")
-    testImplementation("org.robolectric:4.7.3")
+    testImplementation ("org.robolectric:robolectric:4.7.3")
 
     // AndroidX Test - JVM testing
     testImplementation("androidx.test:core-ktx:1.4.0")
@@ -91,4 +91,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation ("org.mockito:mockito-core:3.11.2")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
