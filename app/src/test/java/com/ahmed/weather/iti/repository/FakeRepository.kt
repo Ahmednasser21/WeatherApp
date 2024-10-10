@@ -9,21 +9,19 @@ import com.ahmed.weather.iti.network.FakeRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeRepository (private val fakeRemoteDataSource: FakeRemoteDataSource,
-                      private val fakeLocalDataSource: FakeLocalDataSource
-): IRepository {
+class FakeRepository(
+    private val fakeRemoteDataSource: FakeRemoteDataSource,
+    private val fakeLocalDataSource: FakeLocalDataSource
+) : IRepository {
+
     var forecastResponse: WeatherForecastResponse? = null
     var currentWeatherResponse: WeatherCurrentResponse? = null
     var favouriteList: MutableList<FavouriteDTO> = mutableListOf()
     var alarmList: MutableList<AlarmDTO> = mutableListOf()
-
     var shouldThrowError: Boolean = false
 
     override suspend fun getWeatherForecast(
-        longitude: Double,
-        latitude: Double,
-        units: String,
-        lang: String
+        longitude: Double, latitude: Double, units: String, lang: String
     ): Flow<WeatherForecastResponse> {
         return flow {
             if (shouldThrowError) {
@@ -35,10 +33,7 @@ class FakeRepository (private val fakeRemoteDataSource: FakeRemoteDataSource,
     }
 
     override suspend fun getCurrentWeather(
-        longitude: Double,
-        latitude: Double,
-        units: String,
-        lang: String
+        longitude: Double, latitude: Double, units: String, lang: String
     ): Flow<WeatherCurrentResponse> {
         return flow {
             if (shouldThrowError) {
@@ -73,3 +68,5 @@ class FakeRepository (private val fakeRemoteDataSource: FakeRemoteDataSource,
         return flow { emit(alarmList) }
     }
 }
+
+

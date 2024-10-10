@@ -32,10 +32,10 @@ class FavouriteViewModel(private val repository: IRepository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAllFav()
                 .catch {e->
-                    Log.e(TAG, "getAllFav: ${e.printStackTrace()}" )
+                    e.printStackTrace()
                 }
                 .collectLatest {
-                    Log.d(TAG, "Updating UI with list: $it")
+
                 _favList.emit(it)
             }
         }
