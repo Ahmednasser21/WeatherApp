@@ -24,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.database.AlarmDTO
 import com.ahmed.weather.iti.database.DataBase
+import com.ahmed.weather.iti.database.LocalDataSource
 import com.ahmed.weather.iti.databinding.FragmentAlarmBinding
+import com.ahmed.weather.iti.network.RemoteDataSource
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
 import com.ahmed.weather.iti.ui.home.DataState
@@ -57,10 +59,11 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
     ): View {
         val factory = AlarmViewModelFactory(
             Repository.getInstance(
-                RetrofitObj,
-                DataBase.getInstance(requireContext())
+                RemoteDataSource(RetrofitObj.service),
+                LocalDataSource(DataBase.getInstance(requireContext()))
             )
         )
+
         alarmViewModel = ViewModelProvider(this, factory)[AlarmViewModel::class.java]
         binding = FragmentAlarmBinding.inflate(inflater, container, false)
         return binding.root
@@ -266,7 +269,7 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch(Dispatchers.IO) {alarmViewModel.deleteExpiredAlarms()  }
+        lifecycleScope.launch(Dispatchers.IO) { alarmViewModel.deleteExpiredAlarms() }
     }
 
 }

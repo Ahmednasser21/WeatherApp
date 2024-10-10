@@ -5,56 +5,82 @@ import com.ahmed.weather.iti.WeatherCurrentResponse
 import com.ahmed.weather.iti.database.AlarmDTO
 import com.ahmed.weather.iti.database.FavouriteDTO
 import com.ahmed.weather.iti.database.DataBase
+import com.ahmed.weather.iti.database.LocalDataSource
+import com.ahmed.weather.iti.network.RemoteDataSource
 import com.ahmed.weather.iti.network.RetrofitObj
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class Repository private constructor(private val retrofit:RetrofitObj,private val dataBase: DataBase) {
+class Repository private constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
+) :
+    IRepository {
 
-    companion object{
+    companion object {
         private var INSTANCE: Repository? = null
-        fun getInstance(retrofit:RetrofitObj, dataBase: DataBase):Repository{
-            return INSTANCE?: synchronized(this){
-                val instance = Repository(retrofit,dataBase)
+         fun getInstance(
+            remoteDataSource: RemoteDataSource,
+            localDataSource: LocalDataSource
+        ): Repository {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Repository(remoteDataSource, localDataSource)
                 INSTANCE = instance
                 instance
             }
         }
     }
 
-    suspend fun getWeatherForecast(longitude:Double,latitude:Double,units:String,lang:String): Flow<WeatherForecastResponse>{
+    override suspend fun getWeatherForecast(
+        longitude: Double,
+        latitude: Double,
+        units: String,
+        lang: String
+    ): Flow<WeatherForecastResponse> {
         return flow {
-                val hourlyForecast = retrofit.service.getForecastData(longitude,latitude, units, lang)
-                emit(hourlyForecast)
-                delay(100)
+            val hourlyForecast = remoteDataSource.getForecastData(longitude, latitude, units, lang)
+            emit(hourlyForecast)
+            delay(100)
         }
     }
-    suspend fun getCurrentWeather(longitude:Double,latitude:Double,units:String,lang:String): Flow<WeatherCurrentResponse>{
+
+    override suspend fun getCurrentWeather(
+        longitude: Double,
+        latitude: Double,
+        units: String,
+        lang: String
+    ): Flow<WeatherCurrentResponse> {
         return flow {
-                val currentWeather = retrofit.service.getCurrentData(longitude,latitude, units, lang)
-                emit(currentWeather)
-                delay(100)
+            val currentWeather = remoteDataSource.getCurrentData(longitude, latitude, units, lang)
+            emit(currentWeather)
+            delay(100)
 
         }
     }
-    suspend fun addFav(favouriteDTO: FavouriteDTO){
-        dataBase.favouriteDAO.addFav(favouriteDTO)
+
+    override suspend fun addFav(favouriteDTO: FavouriteDTO) {
+        localDataSource.addFav(favouriteDTO)
     }
-    suspend fun removeFav(favouriteDTO: FavouriteDTO){
-        dataBase.favouriteDAO.deleteFav(favouriteDTO)
+
+    override suspend fun removeFav(favouriteDTO: FavouriteDTO) {
+        localDataSource.deleteFav(favouriteDTO)
     }
-    fun getAllFav():Flow<List<FavouriteDTO>>{
-        return dataBase.favouriteDAO.getAllFav()
+
+    override fun getAllFav(): Flow<List<FavouriteDTO>> {
+        return localDataSource.getAllFav()
     }
-    suspend fun addAlarm(alarmDTO: AlarmDTO){
-        dataBase.alarmDao.addAlarm(alarmDTO)
+
+    override suspend fun addAlarm(alarmDTO: AlarmDTO) {
+        localDataSource.addAlarm(alarmDTO)
     }
-    suspend fun removeAlarm(alarmDTO: AlarmDTO){
-        dataBase.alarmDao.deleteAlarm(alarmDTO)
+
+    override suspend fun removeAlarm(alarmDTO: AlarmDTO) {
+        localDataSource.deleteAlarm(alarmDTO)
     }
-    fun getAllAlarms():Flow<List<AlarmDTO>>{
-        return dataBase.alarmDao.getAllAlarms()
+
+    override fun getAllAlarms(): Flow<List<AlarmDTO>> {
+        return localDataSource.getAllAlarms()
     }
 
 }

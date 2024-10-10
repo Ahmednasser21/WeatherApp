@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.WeatherCurrentResponse
 import com.ahmed.weather.iti.database.DataBase
+import com.ahmed.weather.iti.database.LocalDataSource
 import com.ahmed.weather.iti.databinding.FragmentHomeBinding
+import com.ahmed.weather.iti.network.RemoteDataSource
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
@@ -69,11 +71,10 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = HomeViewModelFactory(
-            Repository.getInstance(
-                RetrofitObj,
-                DataBase.getInstance(requireContext())
-            )
+        val factory = HomeViewModelFactory(Repository.getInstance(
+            RemoteDataSource(RetrofitObj.service),
+            LocalDataSource(DataBase.getInstance(requireContext()))
+        )
         )
         homeViewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 

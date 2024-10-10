@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.database.FavouriteDTO
 import com.ahmed.weather.iti.database.DataBase
+import com.ahmed.weather.iti.database.LocalDataSource
 import com.ahmed.weather.iti.databinding.FragmentFavouriteBinding
+import com.ahmed.weather.iti.network.RemoteDataSource
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
@@ -47,8 +49,8 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListen
     ): View {
         val factory = FavouriteViewModelFactory(
             Repository.getInstance(
-                RetrofitObj,
-                DataBase.getInstance(requireContext())
+                RemoteDataSource(RetrofitObj.service),
+                LocalDataSource(DataBase.getInstance(requireContext()))
             )
         )
         favouriteViewModel = ViewModelProvider(this, factory)[FavouriteViewModel::class.java]
