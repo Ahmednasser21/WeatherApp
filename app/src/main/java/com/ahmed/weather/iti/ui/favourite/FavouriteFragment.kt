@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +22,7 @@ import com.ahmed.weather.iti.databinding.FragmentFavouriteBinding
 import com.ahmed.weather.iti.ui.maps.LocationSharedVM
 import com.ahmed.weather.iti.network.RetrofitObj
 import com.ahmed.weather.iti.repository.Repository
+import com.ahmed.weather.iti.ui.maps.LocationData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +31,7 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "FavouriteFragment"
 
-class FavouriteFragment : Fragment(), OnDeleteClickListener {
+class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListener {
 
     private lateinit var binding: FragmentFavouriteBinding
     private lateinit var favouriteRecycler: RecyclerView
@@ -56,7 +59,7 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        favouriteAdapter = FavouriteAdapter(this)
+        favouriteAdapter = FavouriteAdapter(this,this)
         favouriteRecycler = binding.recFavourite.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = favouriteAdapter
@@ -113,5 +116,12 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener {
             }
         }.create().show()
 
+    }
+
+    override fun onItemClick(favouriteDTO: FavouriteDTO) {
+        sharedVM.sendMainLocationData(LocationData(favouriteDTO.longitude,favouriteDTO.latitude,favouriteDTO.cityName))
+        val action = FavouriteFragmentDirections.actionNavFavouriteToNavHome(true)
+        Navigation.findNavController(requireView()).navigate(action)
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = getString(R.string.favourite)
     }
 }

@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmed.weather.iti.database.FavouriteDTO
 import com.ahmed.weather.iti.databinding.FavItemBinding
 
-class FavouriteAdapter(private val onDeleteClickListener: OnDeleteClickListener) :
+class FavouriteAdapter(private val onDeleteClickListener: OnDeleteClickListener,
+                       private val onFavItemClickListener: OnFavItemClickListener) :
     ListAdapter<FavouriteDTO, FavouriteAdapter.FavouriteViewHolder>(FavouriteDiffUtils()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteViewHolder {
@@ -18,16 +19,20 @@ class FavouriteAdapter(private val onDeleteClickListener: OnDeleteClickListener)
 
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
         val favouriteDTO = getItem(position)
-        holder.bindView(favouriteDTO,onDeleteClickListener)
+        holder.bindView(favouriteDTO,onDeleteClickListener,onFavItemClickListener)
     }
 
     class FavouriteViewHolder(private val binding: FavItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(favouriteDTO: FavouriteDTO,onDeleteClickListener: OnDeleteClickListener) {
+        fun bindView(favouriteDTO: FavouriteDTO,onDeleteClickListener: OnDeleteClickListener,
+                     onFavItemClickListener: OnFavItemClickListener) {
             binding.tvFavCityName.text = favouriteDTO.cityName
             binding.btnRemove.setOnClickListener{
                 onDeleteClickListener.onClick(favouriteDTO)
+            }
+            binding.favContainer.setOnClickListener{
+                onFavItemClickListener.onItemClick(favouriteDTO)
             }
         }
 

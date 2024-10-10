@@ -29,7 +29,7 @@ class MapsFragment : Fragment() {
         private const val TAG = "MapsFragment"
     }
     private val sharedVM : LocationSharedVM by activityViewModels()
-    private val actionInitial = MapsFragmentDirections.actionNavMapsToNavHome()
+    private val actionInitial = MapsFragmentDirections.actionNavMapsToNavHome(false)
     private val actionFav = MapsFragmentDirections.actionNavMapsToNavFavourite()
    private lateinit var navFragmentName:String
 

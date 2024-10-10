@@ -89,23 +89,27 @@ class HomeFragment : Fragment() {
         startUpdatingTime()
 
         lifecycleScope.launch {
-//            sharedVM.mainLocationData.collect {
-//                longitude = it.longitude
-//                latitude = it.latitude
-//                cityName = it.cityName
-//                city.text = it.cityName.substringBefore("}")
-//                homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
-//                homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
-//                Log.i(TAG, "onViewCreated: ${it.latitude} \n ${it.longitude} ${it.cityName}")
-//            }
-            val prefs = requireActivity().getSharedPreferences("locationData", Context.MODE_PRIVATE)
-            longitude = prefs.getFloat("longitude",0.0f).toDouble()
-            latitude = prefs.getFloat("latitude",0.0f).toDouble()
-            cityName = prefs.getString("address_line", "NorthSinai").toString()
-            city.text =cityName.substringBefore("}")
-            homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
-            homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
-
+            val isFav = arguments?.let { HomeFragmentArgs.fromBundle(it).fav } ?: false
+            if (isFav) {
+                sharedVM.mainLocationData.collect {
+                    longitude = it.longitude
+                    latitude = it.latitude
+                    cityName = it.cityName
+                    city.text = it.cityName.substringBefore("}")
+                    homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
+                    homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
+                    Log.i(TAG, "onViewCreated: ${it.latitude} \n ${it.longitude} ${it.cityName}")
+                }
+            } else {
+                val prefs =
+                    requireActivity().getSharedPreferences("locationData", Context.MODE_PRIVATE)
+                longitude = prefs.getFloat("longitude", 0.0f).toDouble()
+                latitude = prefs.getFloat("latitude", 0.0f).toDouble()
+                cityName = prefs.getString("address_line", "NorthSinai").toString()
+                city.text = cityName.substringBefore("}")
+                homeViewModel.getWeatherForecast(longitude, latitude, "metric", "en")
+                homeViewModel.getCurrentWeather(longitude, latitude, "metric", "en")
+            }
 
         }
         lifecycleScope.launch {
@@ -244,7 +248,7 @@ class HomeFragment : Fragment() {
     }
 
 
-        override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

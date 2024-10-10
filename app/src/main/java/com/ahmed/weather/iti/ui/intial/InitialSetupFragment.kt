@@ -90,7 +90,7 @@ class InitialSetupFragment : DialogFragment() {
         notificationSwitch = binding.swchNotification
 
         ok.setOnClickListener {
-            val action = InitialSetupFragmentDirections.actionNavInitialToNavHome()
+            val action = InitialSetupFragmentDirections.actionNavInitialToNavHome(false)
             Navigation.findNavController(it).navigate(action)
         }
 
