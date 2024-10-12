@@ -5,6 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.database.FavouriteDTO
 import com.ahmed.weather.iti.database.DataBase
@@ -36,6 +40,8 @@ private const val TAG = "FavouriteFragment"
 class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListener {
 
     private lateinit var binding: FragmentFavouriteBinding
+    private lateinit var favImg:ImageView
+    private lateinit var emptyText:TextView
     private lateinit var favouriteRecycler: RecyclerView
     private lateinit var addFavourite: FloatingActionButton
     private lateinit var favouriteAdapter: FavouriteAdapter
@@ -61,6 +67,8 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        favImg= binding.imgFav
+        emptyText = binding.tvEmptyFav
         favouriteAdapter = FavouriteAdapter(this,this)
         favouriteRecycler = binding.recFavourite.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -91,8 +99,8 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListen
     private fun setFavList() {
         lifecycleScope.launch {
             favouriteViewModel.favList.collectLatest {
-                Log.i(TAG, "setFavList:$it ")
                 withContext(Dispatchers.Main) {
+                    showUI(it.isEmpty())
                     favouriteAdapter.submitList(it)
                 }
             }
@@ -118,6 +126,17 @@ class FavouriteFragment : Fragment(), OnDeleteClickListener,OnFavItemClickListen
             }
         }.create().show()
 
+    }
+    private fun showUI(isListEmpty:Boolean){
+        if(isListEmpty){
+            favouriteRecycler.visibility =View.GONE
+            favImg.visibility = View.VISIBLE
+            emptyText.visibility =View.VISIBLE
+        }else{
+            favouriteRecycler.visibility =View.VISIBLE
+            favImg.visibility = View.GONE
+            emptyText.visibility =View.GONE
+        }
     }
 
     override fun onItemClick(favouriteDTO: FavouriteDTO) {

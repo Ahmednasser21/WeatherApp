@@ -26,7 +26,18 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:backgroundTint="?attr/colorPrimary">
+
+                <ProgressBar
+                    android:id="@+id/prog_home"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/txt_city"
@@ -142,6 +153,7 @@
             app:layout_constraintTop_toBottomOf="@id/card_current" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -161,9 +173,9 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/pressure"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/pressure" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -171,6 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/pressure"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -193,9 +206,9 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/humidity"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView4"
-                android:src="@drawable/humidity" />
+                app:layout_constraintTop_toBottomOf="@id/imageView4" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -203,6 +216,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/humidity"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
@@ -225,9 +239,9 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/wind"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView5"
-                android:src="@drawable/wind" />
+                app:layout_constraintTop_toBottomOf="@id/imageView5" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -236,6 +250,7 @@
                 android:layout_marginStart="16dp"
                 android:text="@string/wind"
                 android:textSize="20sp"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView6"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
                 app:layout_constraintTop_toTopOf="@+id/imageView6" />
@@ -257,15 +272,16 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/high_tide"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView6"
-                android:src="@drawable/high_tide" />
+                app:layout_constraintTop_toBottomOf="@id/imageView6" />
 
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:textColor="?attr/colorOnPrimary"
                 android:text="@string/sea_level"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView7"
@@ -289,15 +305,16 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/visibility"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView7"
-                android:src="@drawable/visibility" />
+                app:layout_constraintTop_toBottomOf="@id/imageView7" />
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:textColor="?attr/colorOnPrimary"
                 android:text="@string/visibility"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView8"
@@ -321,9 +338,9 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:src="@drawable/cloud"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView8"
-                android:src="@drawable/cloud" />
+                app:layout_constraintTop_toBottomOf="@id/imageView8" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -331,6 +348,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@string/clouds"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                 app:layout_constraintStart_toEndOf="@+id/imageView9"

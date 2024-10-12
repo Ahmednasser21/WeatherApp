@@ -5,12 +5,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
     private var latitude = 0.0
     private var cityName = ""
 
+    private lateinit var progHome:ProgressBar
     private lateinit var currentImage: ImageView
     private lateinit var city: TextView
     private lateinit var date: TextView
@@ -96,6 +97,7 @@ class HomeFragment : Fragment() {
         getRemoteData()
         makeHourlyList()
         makeDailyList()
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -106,7 +108,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showExitDialog() {
-        AlertDialog.Builder(requireContext()).apply {
+        AlertDialog.Builder(requireContext(),R.style.Theme_WeatherApp_Dialog).apply {
             setTitle("Exit App")
             setMessage("Do you really want to exit the app?")
             setPositiveButton("Yes") { dialog, _ ->
@@ -123,6 +125,7 @@ class HomeFragment : Fragment() {
 
 
     private fun initialiseUI() {
+        progHome = binding.progHome
         dailyAdapter = DailyAdapter()
         hourlyAdapter = HourlyAdapter()
         languageSharedPreferences = requireActivity().getSharedPreferences(getString(R.string.language),Context.MODE_PRIVATE)
@@ -200,11 +203,7 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             homeViewModel.forecast.collectLatest { result ->
                 when (result) {
-                    is DataState.Loading -> Toast.makeText(
-                        requireContext(),
-                        "Loading",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    is DataState.Loading -> {}
 
                     is DataState.OnSuccess<*> -> {
                         val weatherForecast = result.data as WeatherForecastResponse
@@ -238,13 +237,10 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             homeViewModel.current.collectLatest { result ->
                 when (result) {
-                    is DataState.Loading -> Toast.makeText(
-                        requireContext(),
-                        "Loading",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    is DataState.Loading -> {}
 
                     is DataState.OnSuccess<*> -> {
+                        progHome.visibility =View.GONE
                         val currentWeather = result.data as WeatherCurrentResponse
                         currentImage.setImageResource(
                             getWeatherIcon(
@@ -267,6 +263,7 @@ class HomeFragment : Fragment() {
                     }
 
                     is DataState.OnFailed -> {
+                        progHome.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
                             "Failed to get data",

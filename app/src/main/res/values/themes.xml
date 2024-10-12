@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Customize your theme here. -->
+
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -29,5 +29,16 @@
     </style>
 
     <style name="Theme.WeatherApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="Theme.WeatherApp.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert"/>
+
+    <style name="Theme.WeatherApp.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/purple_700</item>
+        <item name="colorAccent">@color/purple_700</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+    </style>
+
+    <style name="DialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/purple_700</item>
+    </style>
 </resources>

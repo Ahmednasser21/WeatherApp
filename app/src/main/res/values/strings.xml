@@ -41,4 +41,6 @@
     <string name="tomorrow">Tomorrow</string>
     <string name = "pressure_unit">pa</string>
     <string name="sea_level_unit">msl</string>
+    <string name="favourite_is_empty">Favourite is empty</string>
+    <string name="no_alarms_yet">No alarms yet</string>
 </resources>

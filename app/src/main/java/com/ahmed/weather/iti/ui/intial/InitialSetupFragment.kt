@@ -84,10 +84,10 @@ class InitialSetupFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = requireActivity().getSharedPreferences("first",Context.MODE_PRIVATE)
-        if(sharedPreferences.getString("isFirstTime","false") == "true"){
-            Handler(Looper.getMainLooper()).post { val action = InitialSetupFragmentDirections.actionNavInitialToNavHome(false)
-                Navigation.findNavController(view).navigate(action) }
-        }
+//        if(sharedPreferences.getString("isFirstTime","false") == "true"){
+//            Handler(Looper.getMainLooper()).post { val action = InitialSetupFragmentDirections.actionNavInitialToNavHome(false)
+//                Navigation.findNavController(view).navigate(action) }
+//        }
         editor = sharedPreferences.edit()
         radioGroup = binding.radioGroup
         mapRadioButton = binding.radioMap

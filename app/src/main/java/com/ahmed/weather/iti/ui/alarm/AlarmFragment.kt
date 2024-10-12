@@ -14,6 +14,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -39,6 +42,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.processNextEventInCurrentThread
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -55,6 +59,9 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
     private lateinit var calendar: Calendar
     private lateinit var alarmRecycler: RecyclerView
     private lateinit var alarmViewModel: AlarmViewModel
+    private lateinit var alarmProg:ProgressBar
+    private lateinit var alarmImage:ImageView
+    private lateinit var emptyAlarm:TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,6 +84,9 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
         super.onViewCreated(view, savedInstanceState)
         addNewAlarm = binding.fabAddAlarm
         alarmRecycler = binding.recAlarm
+        alarmImage = binding.imgAlarm
+        emptyAlarm = binding.tvEmptyAlarm
+        alarmProg = binding.progAlarm
 
         val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(3, TimeUnit.HOURS).build()
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
@@ -91,11 +101,14 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
             alarmViewModel.alarmList.collectLatest { result ->
                 when (result) {
                     is DataState.OnSuccess<*> -> {
+                        alarmProg.visibility = View.GONE
                         val alarmList = result.data as List<AlarmDTO>
+                        showUi(alarmList.isEmpty())
                         alarmAdapter.submitList(alarmList)
                     }
 
                     is DataState.OnFailed -> {
+                        alarmProg.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
                             "Failed to load alarms",
@@ -103,9 +116,7 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
                         ).show()
                     }
 
-                    is DataState.Loading -> {
-                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
-                    }
+                    is DataState.Loading -> {}
                 }
             }
         }
@@ -118,18 +129,29 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
 
         calendar = Calendar.getInstance()
     }
+    private fun showUi(isListEmpty:Boolean){
+        if(isListEmpty){
+            alarmRecycler.visibility = View.GONE
+            alarmImage.visibility = View.VISIBLE
+            emptyAlarm.visibility = View.VISIBLE
+        }else{
+            alarmRecycler.visibility = View.VISIBLE
+            alarmImage.visibility = View.GONE
+            emptyAlarm.visibility = View.GONE
+        }
+    }
 
     private fun showDateTimePicker(context: Context) {
         val currentDateTime = Calendar.getInstance()
 
         val datePickerDialog = DatePickerDialog(
-            context,
+            context,R.style.Theme_WeatherApp_Dialog,
             { _, year, month, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, month, dayOfMonth)
 
                 TimePickerDialog(
-                    context,
+                    context,R.style.Theme_WeatherApp_Dialog,
                     { _, hourOfDay, minute ->
                         val selectedDateTime = Calendar.getInstance()
                         selectedDateTime.set(year, month, dayOfMonth, hourOfDay, minute)
@@ -142,11 +164,6 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
                         val formattedDateTime = android.text.format.DateFormat.format(
                             "yyyy-MM-dd-HH:mm", selectedDateTime
                         )
-                        Toast.makeText(
-                            context,
-                            "Alarm set for $formattedDateTime",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         lifecycleScope.launch {
                             alarmViewModel.addAlarm(
                                 AlarmDTO(

@@ -42,4 +42,5 @@
     <string name="tomorrow">غداً</string>
     <string name = "pressure_unit">باسكال</string>
     <string name="sea_level_unit">م.س.ب</string>
+    <string name="favourite_is_empty">قائمة المفضلات فارغة</string>
 </resources>
