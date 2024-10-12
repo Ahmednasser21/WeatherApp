@@ -37,4 +37,8 @@
     <string name="sea_level">Sea level</string>
     <string name="visibility">Visibility</string>
     <string name="clouds">Clouds</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name = "pressure_unit">pa</string>
+    <string name="sea_level_unit">msl</string>
 </resources>

@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.databinding.FragmentSettingsBinding
+import com.ahmed.weather.iti.ui.intial.InitialSetupFragment
 import java.util.Locale
 
 class Settings : Fragment() {
@@ -19,7 +21,6 @@ class Settings : Fragment() {
     private lateinit var rgLocation: RadioGroup
     private lateinit var rgLanguage: RadioGroup
     private lateinit var rgTemperature: RadioGroup
-    private lateinit var rgWindSpeed: RadioGroup
     private lateinit var rgNotifications: RadioGroup
 
 
@@ -43,10 +44,13 @@ class Settings : Fragment() {
             when (checkedId) {
                 R.id.rb_maps -> {
                     saveBooleanToPreferences(getString(R.string.location),"maps",true)
+                    val action = SettingsDirections.actionNavSettingsToNavMaps("initial")
+                    Navigation.findNavController(requireView()).navigate(action)
                 }
 
                 R.id.rb_gps -> {
                     saveBooleanToPreferences(getString(R.string.location),"maps",false)
+
                 }
             }
         }
@@ -54,17 +58,18 @@ class Settings : Fragment() {
         rgLanguage.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rb_arabic -> {
-                    saveBooleanToPreferences(getString(R.string.language),"arabic",true)
+                    saveBooleanToPreferences(getString(R.string.language),"arabic",false)
                     setLocale("ar")
                     restartActivity()
                 }
 
                 R.id.rb_english -> {
-                    saveBooleanToPreferences(getString(R.string.language),"arabic",false)
+                    saveBooleanToPreferences(getString(R.string.language),"arabic",true)
                     setLocale("en")
                     restartActivity()
                 }
             }
+
         }
 
         rgTemperature.setOnCheckedChangeListener { _, checkedId ->
@@ -84,18 +89,6 @@ class Settings : Fragment() {
                 }
             }
             editor.apply()
-        }
-
-        rgWindSpeed.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.rb_meter_s -> {
-                    saveBooleanToPreferences(getString(R.string.wind_speed),"meter",true)
-                }
-
-                R.id.rb_mile_h -> {
-                    saveBooleanToPreferences(getString(R.string.wind_speed),"meter",false)
-                }
-            }
         }
 
         rgNotifications.setOnCheckedChangeListener { _, checkedId ->
@@ -128,10 +121,6 @@ class Settings : Fragment() {
             "kalvin" -> rgTemperature.check(R.id.rb_Kalvin)
             "fahrenheit" -> rgTemperature.check(R.id.rb_fahrenheit)
         }
-
-        val windSpeedPref = getSharedPreferences(getString(R.string.wind_speed))
-        val isMeter = windSpeedPref.getBoolean("meter", false)
-        rgWindSpeed.check(if (isMeter) R.id.rb_meter_s else R.id.rb_mile_h)
         val notificationsPref = getSharedPreferences(getString(R.string.notifications))
         val isEnabled = notificationsPref.getBoolean("enabled", true)
         rgNotifications.check(if (isEnabled) R.id.rb_enable else R.id.rb_disable)
@@ -142,7 +131,6 @@ class Settings : Fragment() {
         rgLocation = binding.rgLocation
         rgLanguage = binding.rgLanguage
         rgTemperature = binding.rgDegree
-        rgWindSpeed = binding.rgWindSpeed
         rgNotifications = binding.radioGroup2
 
     }

@@ -28,7 +28,8 @@ class FavouriteViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        fakeRepository = FakeRepository(FakeRemoteDataSource(FakeWeatherApiService()),
+        fakeRepository = FakeRepository(
+            FakeRemoteDataSource(FakeWeatherApiService()),
             FakeLocalDataSource()
         )
         viewModel = FavouriteViewModel(fakeRepository)
@@ -64,9 +65,10 @@ class FavouriteViewModelTest {
         assertTrue(!fakeRepository.favouriteList.contains(favourite))
     }
 
+
     @Test
     fun `getAllFav should emit favourites from repository`() = runTest {
-        // Given:list of favourites is in the repository
+        // Given: list of favourites in the repository
         val favourites = listOf(
             FavouriteDTO("Test1", 0.0, 0.0),
             FavouriteDTO("Test2", 1.0, 1.0)
@@ -74,19 +76,18 @@ class FavouriteViewModelTest {
         fakeRepository.favouriteList.addAll(favourites)
 
         // When: collecting favourites from the ViewModel
-        var emittedFavourites: List<FavouriteDTO>? = null
+        val emittedFavourites = mutableListOf<List<FavouriteDTO>>()
         val job = launch(testDispatcher) {
-            viewModel.favList.collect {
-                emittedFavourites = it
-            }
+            viewModel.favList.collect { emittedFavourites.add(it) }
         }
 
         viewModel.getAllFav()
         testScheduler.advanceUntilIdle()
 
         // Then: the collected favourites should match the repository's favourites
-        assertEquals(favourites, emittedFavourites)
+        assertEquals(favourites, emittedFavourites.first())
         job.cancel()
+
     }
 
     @Test

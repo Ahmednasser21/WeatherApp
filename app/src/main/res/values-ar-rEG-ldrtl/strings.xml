@@ -38,4 +38,8 @@
     <string name="sea_level">مستوى البحر</string>
     <string name="visibility">الرؤية</string>
     <string name="clouds">السحب</string>
+    <string name="today">اليوم</string>
+    <string name="tomorrow">غداً</string>
+    <string name = "pressure_unit">باسكال</string>
+    <string name="sea_level_unit">م.س.ب</string>
 </resources>

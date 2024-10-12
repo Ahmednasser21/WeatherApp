@@ -17,7 +17,7 @@
         android:text="@string/location"
         android:textAlignment="center"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@+id/rg_location"
         app:layout_constraintStart_toStartOf="@+id/rg_location"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
         android:text="@string/language"
         android:textAlignment="center"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@+id/rg_language"
         app:layout_constraintStart_toStartOf="@+id/rg_language"
         app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +103,7 @@
         android:text="@string/temperature"
         android:textAlignment="center"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@+id/rg_degree"
         app:layout_constraintStart_toStartOf="@+id/rg_degree"
         app:layout_constraintTop_toBottomOf="@+id/rg_location" />
@@ -144,22 +144,22 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/textView13"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/curved_white_background"
         android:elevation="4dp"
-        android:text="@string/wind_speed"
+        android:text="@string/notifications"
         android:textAlignment="center"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/rg_wind_speed"
-        app:layout_constraintStart_toStartOf="@+id/rg_wind_speed"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
+        app:layout_constraintStart_toStartOf="@+id/radioGroup2"
         app:layout_constraintTop_toBottomOf="@+id/rg_language" />
 
     <RadioGroup
-        android:id="@+id/rg_wind_speed"
+        android:id="@+id/radioGroup2"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -167,49 +167,6 @@
         android:background="@drawable/curved_white_background"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView8">
-
-        <RadioButton
-            android:id="@+id/rb_meter_s"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/meter_s"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/rb_mile_h"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/mile_h"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/notifications"
-        android:textAlignment="center"
-        android:background="@drawable/curved_white_background"
-        android:elevation="4dp"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
-        app:layout_constraintStart_toStartOf="@+id/radioGroup2"
-        app:layout_constraintTop_toBottomOf="@+id/rg_degree" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup2"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/curved_white_background"
-        android:elevation="4dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13">
 
         <RadioButton

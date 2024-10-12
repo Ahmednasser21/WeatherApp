@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
@@ -82,7 +83,12 @@ class InitialSetupFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedPreferences = requireActivity().getSharedPreferences("first",Context.MODE_PRIVATE)
+        if(sharedPreferences.getString("isFirstTime","false") == "true"){
+            Handler(Looper.getMainLooper()).post { val action = InitialSetupFragmentDirections.actionNavInitialToNavHome(false)
+                Navigation.findNavController(view).navigate(action) }
+        }
+        editor = sharedPreferences.edit()
         radioGroup = binding.radioGroup
         mapRadioButton = binding.radioMap
         gpsRadioButton = binding.radioGps
@@ -92,6 +98,8 @@ class InitialSetupFragment : DialogFragment() {
         ok.setOnClickListener {
             val action = InitialSetupFragmentDirections.actionNavInitialToNavHome(false)
             Navigation.findNavController(it).navigate(action)
+            editor.putString("isFirstTime","true")
+            editor.apply()
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -115,19 +123,20 @@ class InitialSetupFragment : DialogFragment() {
 
             when (checkId) {
                 R.id.radio_gps -> {
-                    if (checkPermissions()) {
-                        if (isLocationEnabled()) {
-                            startLocationUpdates()
-                        } else {
-                            enableLocationServices()
-                        }
-                    } else {
-                        requestPermissions()
+                    val sharedPreference = requireActivity().getSharedPreferences(getString(R.string.location),Context.MODE_PRIVATE)
+                    with(sharedPreference.edit()) {
+                        putBoolean("maps", false)
+                        apply()
                     }
+                   getCurrentLocation()
                 }
 
                 R.id.radio_map -> {
-
+                    val sharedPreference = requireActivity().getSharedPreferences(getString(R.string.location),Context.MODE_PRIVATE)
+                    with(sharedPreference.edit()) {
+                        putBoolean("maps", true)
+                        apply()
+                    }
                     val action = InitialSetupFragmentDirections.actionNavInitialToMapsFragment("initial")
                     Navigation.findNavController(requireView()).navigate(action)
 
@@ -189,6 +198,18 @@ class InitialSetupFragment : DialogFragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+    }
+
+     fun getCurrentLocation(){
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                startLocationUpdates()
+            } else {
+                enableLocationServices()
+            }
+        } else {
+            requestPermissions()
         }
     }
 
