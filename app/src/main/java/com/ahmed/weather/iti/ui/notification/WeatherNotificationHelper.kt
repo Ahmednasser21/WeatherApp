@@ -17,7 +17,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.ahmed.weather.iti.R
 
-
 class WeatherNotificationHelper(private val context: Context) {
 
     companion object {
@@ -28,21 +27,23 @@ class WeatherNotificationHelper(private val context: Context) {
     }
 
     fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            "Weather Notifications",
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = "Weather Notifications"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Weather Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Weather Notifications"
+                setSound(null, null)
+            }
+            val notificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
         }
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
     }
 
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun sendAlarm(contentText: String, uri: Uri) {
-
+    fun sendAlarm(contentText: String, title: String, uri: Uri) {
         val dismissIntent = Intent(context, WeatherNotificationReceiver::class.java).apply {
             action = "DISMISS_ACTION"
             putExtra("NOTIFICATION_ID", ALARM_NOTIFICATION_ID)
@@ -56,11 +57,11 @@ class WeatherNotificationHelper(private val context: Context) {
         )
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.windy_weather)
-            .setContentTitle("Weather")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(title)
             .setContentText(contentText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound(Uri.EMPTY)
+            .setSound(null)
             .addAction(
                 0,
                 "Dismiss",
@@ -81,9 +82,10 @@ class WeatherNotificationHelper(private val context: Context) {
         val intent = Intent(context, WeatherNotificationReceiver::class.java).apply {
             putExtra("EXTRA_SOUND_URI", soundUri.toString())
         }
+        val requestCode = notificationTime.toInt()
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -91,6 +93,7 @@ class WeatherNotificationHelper(private val context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, notificationTime, pendingIntent)
     }
+
     fun cancelScheduledAlarm(alarmId: Int) {
         val intent = Intent(context, WeatherNotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
@@ -109,15 +112,13 @@ class WeatherNotificationHelper(private val context: Context) {
     }
 
     private fun playAlarmSound(context: Context, soundUri: Uri?) {
-        ringtone = RingtoneManager.getRingtone(context, soundUri)
+        ringtone?.stop()
+        ringtone = RingtoneManager.getRingtone(context, soundUri ?: selectedSoundUri)
         ringtone?.play()
     }
 
     fun stopAlarmSound() {
-        ringtone?.let {
-            if (it.isPlaying) {
-                it.stop()
-            }
-        }
+        ringtone?.stop()
+        ringtone = null
     }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -59,14 +61,12 @@ class Settings : Fragment() {
             when (checkedId) {
                 R.id.rb_arabic -> {
                     saveBooleanToPreferences(getString(R.string.language),"arabic",false)
-                    setLocale("ar")
-                    restartActivity()
+                    changeLanguageSmooth("ar")
                 }
 
                 R.id.rb_english -> {
                     saveBooleanToPreferences(getString(R.string.language),"arabic",true)
-                    setLocale("en")
-                    restartActivity()
+                    changeLanguageSmooth("en")
                 }
             }
 
@@ -157,7 +157,19 @@ class Settings : Fragment() {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
-    private fun restartActivity() {
-        requireActivity().recreate()
+    private fun changeLanguageSmooth(language: String) {
+        setLocale(language)
+
+
+        val fadeOut = AlphaAnimation(1f, 0f)
+        fadeOut.duration = 200
+        fadeOut.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                requireActivity().recreate()
+            }
+        })
+        view?.startAnimation(fadeOut)
     }
 }

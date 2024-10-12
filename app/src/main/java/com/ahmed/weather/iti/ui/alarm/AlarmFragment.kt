@@ -21,6 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.ahmed.weather.iti.R
 import com.ahmed.weather.iti.database.AlarmDTO
 import com.ahmed.weather.iti.database.DataBase
@@ -32,11 +34,13 @@ import com.ahmed.weather.iti.repository.Repository
 import com.ahmed.weather.iti.ui.home.DataState
 import com.ahmed.weather.iti.ui.notification.WeatherNotificationHelper
 import com.ahmed.weather.iti.ui.notification.WeatherNotificationReceiver
+import com.ahmed.weather.iti.ui.notification.WeatherNotificationWorker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class AlarmFragment : Fragment(), OnDeleteAlarmListener {
 
@@ -74,8 +78,8 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
         addNewAlarm = binding.fabAddAlarm
         alarmRecycler = binding.recAlarm
 
-//        val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(3, TimeUnit.HOURS).build()
-//        WorkManager.getInstance(requireContext()).enqueue(workRequest)
+        val workRequest = PeriodicWorkRequestBuilder<WeatherNotificationWorker>(3, TimeUnit.HOURS).build()
+        WorkManager.getInstance(requireContext()).enqueue(workRequest)
 
         val alarmAdapter = AlarmAdapter(this)
         alarmRecycler.apply {
@@ -245,8 +249,8 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
                 lifecycleScope.launch {
                     alarmViewModel.deleteAlarm(alarmDTO)
                     val notificationHelper = WeatherNotificationHelper(requireContext())
-                    notificationHelper.cancelScheduledAlarm(2002)
-                    cancelAlarm()
+                    notificationHelper.cancelScheduledAlarm(alarmDTO.timeInMillis.toInt())
+                    cancelAlarm(alarmDTO.timeInMillis.toInt())
                 }
             }
             setNegativeButton("No", null)
@@ -254,11 +258,11 @@ class AlarmFragment : Fragment(), OnDeleteAlarmListener {
         dialog.show()
     }
 
-    private fun cancelAlarm() {
+    private fun cancelAlarm(requestCode: Int) {
         val intent = Intent(requireContext(), WeatherNotificationReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
-            2002,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

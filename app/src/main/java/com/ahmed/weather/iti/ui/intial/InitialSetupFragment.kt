@@ -128,7 +128,7 @@ class InitialSetupFragment : DialogFragment() {
                         putBoolean("maps", false)
                         apply()
                     }
-                   getCurrentLocation()
+                    getCurrentLocation()
                 }
 
                 R.id.radio_map -> {
@@ -201,7 +201,7 @@ class InitialSetupFragment : DialogFragment() {
         }
     }
 
-     fun getCurrentLocation(){
+    fun getCurrentLocation(){
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 startLocationUpdates()
@@ -263,5 +263,4 @@ class InitialSetupFragment : DialogFragment() {
 
     }
 }
-
 
