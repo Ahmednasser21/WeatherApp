@@ -1,7 +1,8 @@
 #Weather App
+
 Weather App is an Android application that provides real-time weather updates and detailed forecasts for your current location or any other location of your choice.
 
-##Key Features:
+Key Features:
 Weather Conditions: Get real-time weather conditions for your current location (via GPS) or search any location using maps.
 Settings Panel: Customize your experience by selecting preferred measurement units, switching between languages (Arabic, English), choosing a location through maps or GPS, and managing notifications.
 Favorites Screen: Save your favorite locations to quickly view their weather conditions anytime.
@@ -9,7 +10,7 @@ Alarm Screen: Set custom alarms to remind you to check weather conditions at spe
 Light and Dark Mode Support: The app offers both light and dark themes for a personalized experience.
 Offline Mode: Access previously retrieved weather information when offline.
 
-##Built With:
+Built With:
 Google Maps API: For map-based location selection.
 Location API: To fetch real-time GPS data.
 Room Database: For local storage of favorite locations and settings.
